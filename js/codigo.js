@@ -48,7 +48,7 @@ class Libro{
 
 let libros_disponibles = [];
 let libros_prestados = [];
-async function buscar_libro_por_titulo(titulo, libros) { 
+function buscar_libro_por_titulo(titulo, libros) { 
     return new Promise((resolve) => {
         setTimeout(() => {
             for (let i = 0; i < libros.length; i++) {
@@ -58,32 +58,39 @@ async function buscar_libro_por_titulo(titulo, libros) {
                 }
             }
             resolve(-1);
-        }, 0);
+        }, 1000); // Simula un tiempo de espera de 1 segundo
     });
 }
 
-async function reservar_libro(titulo) {
-    let indice = await buscar_libro_por_titulo(titulo, libros_disponibles);
-    if (indice !== -1) {
-        libros_prestados.push(libros_disponibles[indice]);
-        libros_disponibles.splice(indice, 1);
-        const tiempo_prestamo_libro = setTimeout(() => {
-            let aviso_devolucion = document.getElementById('aviso_devolucion');
-            aviso_devolucion.innerHTML = `Tiene el libro (${titulo}) pendiente de devolucion`;
-        }, 1.296e+9);
-        libros_disponibles[indice].fecha_prestamo = tiempo_prestamo_libro;
-        return true;
-    }
-    return false;
+function reservar_libro(titulo) {
+    return new Promise(async (resolve) => {
+        let indice = await buscar_libro_por_titulo(titulo, libros_disponibles);
+        if (indice !== -1) {
+            libros_prestados.push(libros_disponibles[indice]);
+            libros_disponibles.splice(indice, 1);
+            const tiempo_prestamo_libro = setTimeout(() => {
+                let aviso_devolucion = document.getElementById('aviso_devolucion');
+                aviso_devolucion.innerHTML = `Tiene el libro (${titulo}) pendiente de devolucion`;
+            }, 1.296e+9);
+            libros_disponibles[indice].fecha_prestamo = tiempo_prestamo_libro;
+            setTimeout(() => resolve(true), 1000); // Simula un tiempo de espera de 1 segundo
+        } else {
+            setTimeout(() => resolve(false), 1000); // Simula un tiempo de espera de 1 segundo
+        }
+    });
 }
 
-async function devolver_libro(titulo) {
-    let indice = await buscar_libro_por_titulo(titulo, libros_prestados);
-    if (indice !== -1) {
-        libros_disponibles.push(libros_prestados[indice]);
-        libros_prestados.splice(indice, 1);
-        return true;
-    }
+function devolver_libro(titulo) {
+    return new Promise(async (resolve) => {
+        let indice = await buscar_libro_por_titulo(titulo, libros_prestados);
+        if (indice !== -1) {
+            libros_disponibles.push(libros_prestados[indice]);
+            libros_prestados.splice(indice, 1);
+            setTimeout(() => resolve(true), 1000); // Simula un tiempo de espera de 1 segundo
+        } else {
+            setTimeout(() => resolve(false), 1000); // Simula un tiempo de espera de 1 segundo
+        }
+    });
 }
 
 
