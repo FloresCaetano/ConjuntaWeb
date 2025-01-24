@@ -1,4 +1,5 @@
 Evaluacion Conjunta Parcial II
+
 Nombres: Caetano Flores y Leonardo Narváez.
 
 Objetivo: Evaluar la capacidad del estudiante para analizar y proponer soluciones a un problema práctico 
@@ -38,54 +39,70 @@ Para poder llevar a cabo la organizacion creamos *dos arreglos* de la clase Libr
     libros_prestados: Contendra los libros prestados, un libro prestado sera movido desde el arreglo libros_disponibles siempre y cuando se ejecute un prestamo existoso.
 
 *Funciones del sistema de prestamos, devoluciones y busquedas*
+*Busqueda de un libro*
+Para poder realizar la busqueda de un libro lo haremos mediante su arreglo y por su titulo.  
 
-function buscar_libro_por_titulo(titulo, libros) { 
-    let libro = libros.filter(libro => libro.titulo === titulo);
-    if (libro.length > 0) {
-        return libros.indexOf(libro[0]);
-    }
-    else
-        return -1;
-}
+                                                    function buscar_libro_por_titulo(titulo, libros) { 
+                                                        let libro = libros.filter(libro => libro.titulo === titulo);
+                                                        if (libro.length > 0) {
+                                                            return libros.indexOf(libro[0]);
+                                                        }
+                                                        else
+                                                            return -1;
+                                                    }
 
-function reservar_libro(titulo){
-    // busca un libro por titulo en libros disponibles
-    // si lo encuentra lo mueve a libros prestados
-    let indice = buscar_libro_por_titulo(titulo, libros_disponibles);
-    if (indice !== -1) {
-        libros_prestados.push(libros_disponibles[indice]);
-        libros_disponibles.splice(indice, 1);
-        return true;
-    }
-    return false;
-}
-
-function devolver_libro(titulo){
-    // regresa un libro prestado a libros disponibles
-    let indice = buscar_libro_por_titulo(titulo, libros_prestados);
-    if (indice !== -1) {
-        libros_disponibles.push(libros_prestados[indice]);
-        libros_prestados.splice(indice, 1);
-        return true;
-    }
-}
+Usando el metodo filter que nos ayudara creando un nuevo array con todos los elementos que cumplan la condicion, en nuestro caso el arreglo de libros filtra mediante el titulo proporcionado. El resultado sera guardado en una nueva variable libro que contendra los libros que cumplan la condicion.
+Luego verificaremos que si el libro buscado se encuentra en el arreglo y de ser asi devolveremos su indice. Primero tenemos que asegurarnos que si el arreglo libro no este vacio, porque si lo esta significaria que no encontro nada. Por otro lado si encontro almenos uno, usaremos la funcion indexOf para obtener la posicion del primer elemento filtrado es decir libro[0], dentro del arreglo original libros. 
 
 
-function mostar_libros_disponibles(){
-    const doc_libros_disponibles = document.getElementById('libros_disponibles');
-    libros_disponibles.innerHTML = '';
-    for (const libro of libros_disponibles) {
-        doc_libros_disponibles.innerHTML += `<li>${libro.titulo}</li>`;
-    }
-}
+*Reservacion o prestamo*
 
-function mostrar_libros_prestados(){
-    const doc_libros_prestados = document.getElementById('libros_prestados');
-    libros_prestados.innerHTML = '';
-    for (const libro of libros_prestados) {
-        doc_libros_prestados.innerHTML += `<li>${libro.titulo}</li>`;
-    }
-}
+Esta funcion reserva un libro, moviendolo del arreglo de libros disponibles (libros_disponibles) al arreglo de libros prestados (libros_prestados).
+
+Crearemos una nueva variable *indice* que guardara el resultado de la busqueda del libro a reservar.
+Si encuentra un libro usamos *push* para añadir el libro o elemento al final del arreglo de libros_prestados.
+caso contrario no añadimos nada.
+
+                                                    function reservar_libro(titulo){
+
+                                                        let indice = buscar_libro_por_titulo(titulo, libros_disponibles);
+                                                        if (indice !== -1) {
+                                                            libros_prestados.push(libros_disponibles[indice]);
+                                                            libros_disponibles.splice(indice, 1);
+                                                            return true;
+                                                        }
+                                                        return false;
+                                                    }
+
+*Devoluciones*
+
+
+
+                                                    function devolver_libro(titulo){
+                                                        let indice = buscar_libro_por_titulo(titulo, libros_prestados);
+                                                        if (indice !== -1) {
+                                                            libros_disponibles.push(libros_prestados[indice]);
+                                                            libros_prestados.splice(indice, 1);
+                                                            return true;
+                                                        }
+                                                    }
+
+
+                                                    function mostar_libros_disponibles(){
+                                                        const doc_libros_disponibles = document.getElementById('libros_disponibles');
+                                                        libros_disponibles.innerHTML = '';
+                                                        for (const libro of libros_disponibles) {
+                                                            doc_libros_disponibles.innerHTML += `<li>${libro.titulo}</li>`;
+                                                        }
+                                                    }
+
+                                                    function mostrar_libros_prestados(){
+                                                        const doc_libros_prestados = document.getElementById('libros_prestados');
+                                                        libros_prestados.innerHTML = '';
+                                                        for (const libro of libros_prestados) {
+                                                            doc_libros_prestados.innerHTML += `<li>${libro.titulo}</li>`;
+                                                        }
+                                                    }
 
 
 
