@@ -157,7 +157,7 @@ Las alertas se utilizan para notificar de manera inmediata y visible al usuario 
 
 *5. Eventos y usabilidad: ¿Cómo mejorar la experiencia del usuario con eventos (onclick, onchange, onmouseover, onmouseout, onfocus, onblur)?* 
 
-Los recordatorios se utilizan en la funcion reservar_libro. Cuando un usuario reserva un libro, se establece un temporizador (setTimeout) que notificara al usuario después de un cierto tiempo (en este caso, 15 días) que tiene un libro pendiente de devolución.
+Los recordatorios se utilizan en la funcion reservar_libro. Cuando un usuario reserva un libro, se establece un temporizador (setTimeout) que notificara al usuario después de un cierto tiempo (en este caso, 15 dias) que tiene un libro pendiente de devolucion.
 
 setTimeout se utiliza para programar una notificacion que se mostrara en el elemento HTML con el ID aviso_devolucion después de 15 dias (1.296e+9 milisegundos). Este mensaje recordará al usuario que tiene un libro pendiente de devolucion.
 
@@ -165,6 +165,172 @@ Los recordatorios son utiles para asegurarse de que los usuarios no olviden devo
 
 *6. Funciones avanzadas: ¿Cómo usar funciones autoejecutables, anónimas, y async/await para manejar procesos asíncronos?*
 
-
+Las funciones asincronas (async/await) las usamos en las funciones reservar_libro, devolver_libro y buscar_libro_por_titulo para manejar operaciones que simulan un retraso, como la busqueda de un libro en una lista, permitiendo que el programa espere a que se complete la operacion antes de continuar. 
 
 *7. Simulación de procesos asíncronos: ¿Cómo implementar la reserva y devolución de libros usando promesas y setTimeout para simular tiempos de espera?* 
+
+El setTimeout se utiliza para simular un retraso en la ejecucion de ciertas operaciones, como la busqueda de un libro o la confirmacion de una reserva. Esto es útil para imitar el comportamiento de una operacion que tomaria tiempo en un entorno real, como una consulta a una base de datos o una solicitud a un servidor.
+
+La funcion reservar_libro utiliza una promesa para manejar el proceso de reserva de manera asincrona. Primero, busca el libro en la lista de disponibles usando buscar_libro_por_titulo (que tambien es una promesa) y luego realiza la reserva si el libro esta disponible.
+
+*Codigo final actualizado con lo pedido en las preguntas.*
+
+//Manejo usuarios
+class biblioteca {
+    usuarios = [];
+}
+
+class usuario {
+    #ci;
+    #usuario;
+    #contraseña;
+    libros_previamente_reservados = [];
+
+    constructor(ci, usuario, contraseña) {
+        this.#ci = ci;
+        this.#usuario = usuario;
+        this.#contraseña = contraseña;
+    }
+
+    // Métodos para acceder a las propiedades privadas si es necesario
+    getCi() {
+        return this.#ci;
+    }
+
+    getUsuario() {
+        return this.#usuario;
+    }
+
+    getContraseña() {
+        return this.#contraseña;
+    }
+}
+
+function registar_usuario(){
+    let ci = document.getElementById('ci').value;
+    let usuario = document.getElementById('usuario').value;
+    let contraseña = document.getElementById('contraseña').value;
+
+    let nuevo_usuario = new usuario(ci, usuario, contraseña);
+    biblioteca.usuarios.push(nuevo_usuario);
+    nuevo_usuario.seal(); // sellamos el objeto para que no se modifiquen sus propiedades por seguridad
+}
+
+
+class Libro{
+    titulo;
+    autor;
+    genero;
+    tiempo_prestamo;
+}
+
+let libros_disponibles = [];
+let libros_prestados = [];
+function buscar_libro_por_titulo(titulo, libros) { 
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            for (let i = 0; i < libros.length; i++) {
+                if (libros[i].titulo === titulo) {
+                    resolve(i);
+                    return;
+                }
+            }
+            resolve(-1);
+        }, 1000); // Simula un tiempo de espera de 1 segundo
+    });
+}
+
+function reservar_libro(titulo, usuario) {
+    return new Promise(async (resolve) => {
+        let indice = await buscar_libro_por_titulo(titulo, libros_disponibles);
+        if (indice !== -1) {
+            libros_prestados.push(libros_disponibles[indice]);
+            libros_disponibles.splice(indice, 1);
+
+            usuario.libros_previamente_reservados.push(titulo); // Guardamos el libro reservado por el usuario para verificar luego si esta disponible en otra ocacion
+
+            const tiempo_prestamo_libro = setTimeout(() => {
+                let aviso_devolucion = document.getElementById('aviso_devolucion');
+                aviso_devolucion.innerHTML = `Tiene el libro (${titulo}) pendiente de devolucion`;
+            }, 1.296e+9);
+            libros_disponibles[indice].tiempo_prestamo = tiempo_prestamo_libro;
+            setTimeout(() => resolve(true), 1000); // Simula un tiempo de espera de 1 segundo
+        } else {
+            setTimeout(() => resolve(false), 1000); // Simula un tiempo de espera de 1 segundo
+        }
+    });
+}
+
+function devolver_libro(titulo) {
+    return new Promise(async (resolve) => {
+        let indice = await buscar_libro_por_titulo(titulo, libros_prestados);
+        if (indice !== -1) {
+            libros_disponibles.push(libros_prestados[indice]);
+            libros_prestados.splice(indice, 1);
+            setTimeout(() => resolve(true), 1000); // Simula un tiempo de espera de 1 segundo
+        } else {
+            setTimeout(() => resolve(false), 1000); // Simula un tiempo de espera de 1 segundo
+        }
+    });
+}
+
+
+function mostar_libros_disponibles(){
+    const doc_libros_disponibles = document.getElementById('libros_disponibles');
+    libros_disponibles.innerHTML = '';
+    for (const libro of libros_disponibles) {
+        doc_libros_disponibles.innerHTML += `<li>${libro.titulo}</li>`;
+    }
+}
+
+function mostrar_libros_prestados(){
+    const doc_libros_prestados = document.getElementById('libros_prestados');
+    libros_prestados.innerHTML = '';
+    for (const libro of libros_prestados) {
+        doc_libros_prestados.innerHTML += `<li>${libro.titulo}</li>`;
+    }
+}
+
+//funcion con setInterval asyncrona para verificar si el libro esta disponible
+setInterval(async () => {
+    for (const libro of libros_disponibles) {
+        for (const usuario of biblioteca.usuarios)
+            for (const libro_reservado of usuario.libros_previamente_reservados) {
+                if(libro_reservado.titulo == libro.titulo){
+                    alert(`libro ${libro.titulo} reservado anteriormente ahora esta disponible`);
+                }
+            }
+    }
+}, 1000);
+
+//Eventos y usabilidad
+let doc_libros_disponibles = document.querySelectorAll('#libros_disponibles li');
+let doc_libros_prestados = document.querySelectorAll('#libros_prestados li');
+
+for (const doc_libro of doc_libros_disponibles) {
+    //añade un evento a todos los libros disponibles que al hacer click los reserva
+    doc_libro.addEventListener('click', () => {
+        reservar_libro(doc_libro.innerHTML);
+        mostar_libros_disponibles();
+        mostrar_libros_prestados();
+    });
+
+    doc_libro.addEventListener('mouseover', () => {
+        doc_libro.style.backgroundColor = 'lightgray';
+    });
+}
+
+for (const doc_libro of doc_libros_prestados) {
+    //añade un evento a todos los libros prestados que al hacer click los devuelve
+    doc_libro.addEventListener('click', () => {
+        devolver_libro(doc_libro.innerHTML);
+        mostar_libros_disponibles();
+        mostrar_libros_prestados();
+    });
+
+    doc_libro.addEventListener('mouseover', () => {
+        doc_libro.style.backgroundColor = 'lightgray';
+    });
+}
+
+
