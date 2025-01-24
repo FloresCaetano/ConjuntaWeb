@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+h1 {
+    margin: 0.5em 0;
+}
+
+.libros {
+    display: flex;
+    justify-content: space-around;
+    padding: 1em;
+}
+
+.libros ul {
+    list-style-type: none;
+    padding: 0;
+    width: 45%;
+}
+
+.libros ul li {
+    background-color: #fff;
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#aviso_devolucion {
+    color: red;
+    text-align: center;
+    margin: 1em 0;
+}
