@@ -8,21 +8,21 @@ class Libro{
 let libros_disponibles = [];
 let libros_prestados = [];
 
-function buscar_libro(titulo, librosDisponibles) { 
+function buscar_libro_por_titulo(titulo, libros) { //Cambiamos la variable titulo y el libro.titulo por el autor o genero segun sea necesario
     // busca un libro por titulo en libros disponibles y regresa el indice
     // si no lo encuentra regresa -1
-    for (let i = 0; i < librosDisponibles.length; i++) {
-        if (librosDisponibles[i].titulo === titulo) {
-            return i;
-        }
+    let libro = libros.filter(libro => libro.titulo === titulo);
+    if (libro.length > 0) {
+        return libros.indexOf(libro[0]);
     }
-    return -1;
+    else
+        return -1;
 }
 
 function reservar_libro(titulo){
     // busca un libro por titulo en libros disponibles
     // si lo encuentra lo mueve a libros prestados
-    let indice = buscar_libro(titulo, libros_disponibles);
+    let indice = buscar_libro_por_titulo(titulo, libros_disponibles);
     if (indice !== -1) {
         libros_prestados.push(libros_disponibles[indice]);
         libros_disponibles.splice(indice, 1);
@@ -33,11 +33,12 @@ function reservar_libro(titulo){
 
 function devolver_libro(titulo){
     // regresa un libro prestado a libros disponibles
-    let indice = buscar_libro(titulo, libros_prestados);
+    let indice = buscar_libro_por_titulo(titulo, libros_prestados);
     if (indice !== -1) {
         libros_disponibles.push(libros_prestados[indice]);
         libros_prestados.splice(indice, 1);
         return true;
     }
 }
+
 
