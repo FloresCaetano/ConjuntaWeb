@@ -62,5 +62,35 @@ function mostrar_libros_prestados(){
     }
 }
 
+//Eventos y usabilidad
+let doc_libros_disponibles = document.querySelectorAll('#libros_disponibles li');
+let doc_libros_prestados = document.querySelectorAll('#libros_prestados li');
+
+for (const doc_libro of doc_libros_disponibles) {
+    //añade un evento a todos los libros disponibles que al hacer click los reserva
+    doc_libro.addEventListener('click', () => {
+        reservar_libro(doc_libro.innerHTML);
+        mostar_libros_disponibles();
+        mostrar_libros_prestados();
+    });
+
+    doc_libro.addEventListener('mouseover', () => {
+        doc_libro.style.backgroundColor = 'lightgray';
+    });
+}
+
+for (const doc_libro of doc_libros_prestados) {
+    //añade un evento a todos los libros prestados que al hacer click los devuelve
+    doc_libro.addEventListener('click', () => {
+        devolver_libro(doc_libro.innerHTML);
+        mostar_libros_disponibles();
+        mostrar_libros_prestados();
+    });
+
+    doc_libro.addEventListener('mouseover', () => {
+        doc_libro.style.backgroundColor = 'lightgray';
+    });
+}
+
 
 
