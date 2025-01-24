@@ -12,7 +12,7 @@ libros. Actualmente, los usuarios pueden buscar libros, pero no hay una forma ef
 devolverlos o verificar su disponibilidad en tiempo real. Además, el sistema no cuenta con alertas para 
 recordar a los usuarios la fecha de devolución ni notificaciones sobre la disponibilidad de libros reservados. 
 
-1. Estructura del sistema de préstamos: ¿Cómo organizar y manipular los libros prestados usando arrays y sus métodos (push, pop, shift, unshift, splice)? 
+*1. Estructura del sistema de préstamos: ¿Cómo organizar y manipular los libros prestados usando arrays y sus métodos (push, pop, shift, unshift, splice)?*
 
 En la organizacion decidimos crear una *clase Libro* basica con los atributos necesario para representar un libro en el sistema, no contendra metodos porque solo va estar diseñado para subrir las caracteristicas principales que se necesitan para gestionar libros en este sistema de prestamos. 
 
@@ -51,16 +51,13 @@ Para poder realizar la busqueda de un libro lo haremos mediante su arreglo y por
                                                             return -1;
                                                     }
 
-Usando el metodo filter que nos ayudara creando un nuevo array con todos los elementos que cumplan la condicion, en nuestro caso el arreglo de libros filtra mediante el titulo proporcionado. El resultado sera guardado en una nueva variable libro que contendra los libros que cumplan la condicion.
-Luego verificaremos que si el libro buscado se encuentra en el arreglo y de ser asi devolveremos su indice. Primero tenemos que asegurarnos que si el arreglo libro no este vacio, porque si lo esta significaria que no encontro nada. Por otro lado si encontro almenos uno, usaremos la funcion indexOf para obtener la posicion del primer elemento filtrado es decir libro[0], dentro del arreglo original libros. 
-
 
 *Reservacion o prestamo*
 
 Esta funcion reserva un libro, moviendolo del arreglo de libros disponibles (libros_disponibles) al arreglo de libros prestados (libros_prestados).
 
 Crearemos una nueva variable *indice* que guardara el resultado de la busqueda del libro a reservar.
-Si encuentra un libro usamos *push* para añadir el libro o elemento al final del arreglo de libros_prestados.
+Si encuentra un libro usamos *push* para añadir el libro o elemento al final del arreglo de libros_prestados, de ello hacemos una elminacion con la funcion splilce para eliminar el libro a prestar del arreglo libros_disponibles en la posicion del indice.
 caso contrario no añadimos nada.
 
                                                     function reservar_libro(titulo){
@@ -76,6 +73,7 @@ caso contrario no añadimos nada.
 
 *Devoluciones*
 
+Estan funcion devuelve el libro prestado, moviendolo del arreglo libros_prestados al arreglo libros_disponibles
 
 
                                                     function devolver_libro(titulo){
@@ -87,6 +85,11 @@ caso contrario no añadimos nada.
                                                         }
                                                     }
 
+El funcionamiento de la devolucion es similar al de la reservacion, es decir:
+creamos una nueva variable indice que busque el libro por su titulo desde el arreglo libros_prestados. Si lo encuentra con la funcion *push* agregamos el libro prestado al arreglo de libros_disponibles, y eliminamos el libro del arreglo libros_prestados con su respectiva posicion (es decir su indice). 
+
+*Mostrar libros prestados disponibles*
+Estas funciones su unico proposito es mostrar la informacion de los libros que se encuentran disponibles y prestados.
 
                                                     function mostar_libros_disponibles(){
                                                         const doc_libros_disponibles = document.getElementById('libros_disponibles');
@@ -106,7 +109,19 @@ caso contrario no añadimos nada.
 
 
 
-2. Filtrado y búsquedas dinámicas: ¿Cómo implementar filtros (filter) y búsqueda de libros por título, autor o género?
+*2. Filtrado y búsquedas dinámicas: ¿Cómo implementar filtros (filter) y búsqueda de libros por título, autor o género?*
+
+                                                    function buscar_libro_por_titulo(titulo, libros) { 
+                                                        let libro = libros.filter(libro => libro.titulo === titulo);
+                                                        if (libro.length > 0) {
+                                                            return libros.indexOf(libro[0]);
+                                                        }
+                                                        else
+                                                            return -
+                                                            1;
+                                                    }
+Usando el metodo filter que nos ayudara creando un nuevo array con todos los elementos que cumplan la condicion, en nuestro caso el arreglo de libros filtra mediante el titulo proporcionado. El resultado sera guardado en una nueva variable libro que contendra los libros que cumplan la condicion.
+Luego verificaremos que si el libro buscado se encuentra en el arreglo y de ser asi devolveremos su indice. Primero tenemos que asegurarnos que si el arreglo libro no este vacio, porque si lo esta significaria que no encontro nada. Por otro lado si encontro almenos uno, usaremos la funcion indexOf para obtener la posicion del primer elemento filtrado es decir libro[0], dentro del arreglo original libros. 
 
 3. Interacción con el usuario: ¿Cómo mostrar la lista de libros disponibles y los libros prestados usando manipulación del DOM (getElementById, querySelectorAll)? 
 
