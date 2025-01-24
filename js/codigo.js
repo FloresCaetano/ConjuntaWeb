@@ -7,6 +7,7 @@ class usuario {
     #ci;
     #usuario;
     #contraseña;
+    libros_previamente_reservados = [];
 
     constructor(ci, usuario, contraseña) {
         this.#ci = ci;
@@ -62,17 +63,20 @@ function buscar_libro_por_titulo(titulo, libros) {
     });
 }
 
-function reservar_libro(titulo) {
+function reservar_libro(titulo, usuario) {
     return new Promise(async (resolve) => {
         let indice = await buscar_libro_por_titulo(titulo, libros_disponibles);
         if (indice !== -1) {
             libros_prestados.push(libros_disponibles[indice]);
             libros_disponibles.splice(indice, 1);
+
+            usuario.libros_previamente_reservados.push(titulo); // Guardamos el libro reservado por el usuario para verificar luego si esta disponible en otra ocacion
+
             const tiempo_prestamo_libro = setTimeout(() => {
                 let aviso_devolucion = document.getElementById('aviso_devolucion');
                 aviso_devolucion.innerHTML = `Tiene el libro (${titulo}) pendiente de devolucion`;
             }, 1.296e+9);
-            libros_disponibles[indice].fecha_prestamo = tiempo_prestamo_libro;
+            libros_disponibles[indice].tiempo_prestamo = tiempo_prestamo_libro;
             setTimeout(() => resolve(true), 1000); // Simula un tiempo de espera de 1 segundo
         } else {
             setTimeout(() => resolve(false), 1000); // Simula un tiempo de espera de 1 segundo
@@ -109,6 +113,18 @@ function mostrar_libros_prestados(){
         doc_libros_prestados.innerHTML += `<li>${libro.titulo}</li>`;
     }
 }
+
+//funcion con setInterval asyncrona para verificar si el libro esta disponible
+setInterval(async () => {
+    for (const libro of libros_disponibles) {
+        for (const usuario of biblioteca.usuarios)
+            for (const libro_reservado of usuario.libros_previamente_reservados) {
+                if(libro_reservado.titulo == libro.titulo){
+                    alert(`libro ${libro.titulo} reservado anteriormente ahora esta disponible`);
+                }
+            }
+    }
+}, 1000);
 
 //Eventos y usabilidad
 let doc_libros_disponibles = document.querySelectorAll('#libros_disponibles li');
