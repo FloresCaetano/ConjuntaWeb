@@ -1,3 +1,44 @@
+//Manejo usuarios
+class biblioteca {
+    usuarios = [];
+}
+
+class usuario {
+    #ci;
+    #usuario;
+    #contraseña;
+
+    constructor(ci, usuario, contraseña) {
+        this.#ci = ci;
+        this.#usuario = usuario;
+        this.#contraseña = contraseña;
+    }
+
+    // Métodos para acceder a las propiedades privadas si es necesario
+    getCi() {
+        return this.#ci;
+    }
+
+    getUsuario() {
+        return this.#usuario;
+    }
+
+    getContraseña() {
+        return this.#contraseña;
+    }
+}
+
+function registar_usuario(){
+    let ci = document.getElementById('ci').value;
+    let usuario = document.getElementById('usuario').value;
+    let contraseña = document.getElementById('contraseña').value;
+
+    let nuevo_usuario = new usuario(ci, usuario, contraseña);
+    biblioteca.usuarios.push(nuevo_usuario);
+    nuevo_usuario.seal(); // sellamos el objeto para que no se modifiquen sus propiedades por seguridad
+}
+
+
 class Libro{
     titulo;
     autor;
