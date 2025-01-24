@@ -2,7 +2,7 @@ class Libro{
     titulo;
     autor;
     genero;
-    fecha_prestamo;
+    tiempo_prestamo;
 }
 
 let libros_disponibles = [];
@@ -25,6 +25,11 @@ function reservar_libro(titulo){
     if (indice !== -1) {
         libros_prestados.push(libros_disponibles[indice]);
         libros_disponibles.splice(indice, 1);
+        const tiempo_prestamo_libro = setTimeout(() => {
+            let aviso_devolucion = document.getElementById('aviso_devolucion');
+            aviso_devolucion.innerHTML = `Tiene el libro (${titulo}) pendiente de devolucion`;
+          }, 1.296e+9);
+        libros_disponibles[indice].fecha_prestamo = tiempo_prestamo_libro;
         return true;
     }
     return false;
@@ -56,5 +61,6 @@ function mostrar_libros_prestados(){
         doc_libros_prestados.innerHTML += `<li>${libro.titulo}</li>`;
     }
 }
+
 
 
