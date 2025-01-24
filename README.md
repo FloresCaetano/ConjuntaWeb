@@ -120,6 +120,7 @@ Estas funciones su unico proposito es mostrar la informacion de los libros que s
                                                             return -
                                                             1;
                                                     }
+
 Usando el metodo filter que nos ayudara creando un nuevo array con todos los elementos que cumplan la condicion, en nuestro caso el arreglo de libros filtra mediante el titulo proporcionado. El resultado sera guardado en una nueva variable libro que contendra los libros que cumplan la condicion.
 Luego verificaremos que si el libro buscado se encuentra en el arreglo y de ser asi devolveremos su indice. Primero tenemos que asegurarnos que si el arreglo libro no este vacio, porque si lo esta significaria que no encontro nada. Por otro lado si encontro almenos uno, usaremos la funcion indexOf para obtener la posicion del primer elemento filtrado es decir libro[0], dentro del arreglo original libros. 
 
@@ -147,10 +148,23 @@ Recorremos cada libro en las listas de libros disponibles y prestado con un bucl
 En la actualizacion dinamica del DOM, en cada iteracion del bucle el titulo del libro se agregara al elemento del HTML utilizado, permitiendo la actualizacion de la lista de los libros al usuario.
 
 
-4. Alertas y recordatorios: ¿Cómo enviar recordatorios automáticos de devolución usando setTimeout o setInterval? 
+*4. Alertas y recordatorios: ¿Cómo enviar recordatorios automáticos de devolución usando setTimeout o setInterval?*
 
-5. Eventos y usabilidad: ¿Cómo mejorar la experiencia del usuario con eventos (onclick, onchange, onmouseover, onmouseout, onfocus, onblur)? 
+Las alertas se utilizan en la función que se ejecuta periódicamente con setInterval. Esta función verifica si algún libro que fue reservado previamente por un usuario ahora está disponible nuevamente.
+En este bloque de código, se recorre la lista de libros disponibles y se compara con los libros que cada usuario ha reservado previamente. Si se encuentra que un libro que estaba reservado ahora está disponible, se muestra una alerta al usuario.
 
-6. Funciones avanzadas: ¿Cómo usar funciones autoejecutables, anónimas, y async/await para manejar procesos asíncronos? 
+Las alertas se utilizan para notificar de manera inmediata y visible al usuario que un libro que había reservado anteriormente ahora está disponible. Esto es útil para que el usuario pueda tomar acción rápidamente, como reservar el libro nuevamente si lo desea.
 
-7. Simulación de procesos asíncronos: ¿Cómo implementar la reserva y devolución de libros usando promesas y setTimeout para simular tiempos de espera? 
+*5. Eventos y usabilidad: ¿Cómo mejorar la experiencia del usuario con eventos (onclick, onchange, onmouseover, onmouseout, onfocus, onblur)?* 
+
+Los recordatorios se utilizan en la funcion reservar_libro. Cuando un usuario reserva un libro, se establece un temporizador (setTimeout) que notificara al usuario después de un cierto tiempo (en este caso, 15 días) que tiene un libro pendiente de devolución.
+
+setTimeout se utiliza para programar una notificacion que se mostrara en el elemento HTML con el ID aviso_devolucion después de 15 dias (1.296e+9 milisegundos). Este mensaje recordará al usuario que tiene un libro pendiente de devolucion.
+
+Los recordatorios son utiles para asegurarse de que los usuarios no olviden devolver los libros que han reservado. Esto ayuda a mantener un flujo adecuado de libros en la biblioteca y evita que los libros permanezcan prestados por mas tiempo del debido.
+
+*6. Funciones avanzadas: ¿Cómo usar funciones autoejecutables, anónimas, y async/await para manejar procesos asíncronos?*
+
+
+
+*7. Simulación de procesos asíncronos: ¿Cómo implementar la reserva y devolución de libros usando promesas y setTimeout para simular tiempos de espera?* 
