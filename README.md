@@ -123,7 +123,29 @@ Estas funciones su unico proposito es mostrar la informacion de los libros que s
 Usando el metodo filter que nos ayudara creando un nuevo array con todos los elementos que cumplan la condicion, en nuestro caso el arreglo de libros filtra mediante el titulo proporcionado. El resultado sera guardado en una nueva variable libro que contendra los libros que cumplan la condicion.
 Luego verificaremos que si el libro buscado se encuentra en el arreglo y de ser asi devolveremos su indice. Primero tenemos que asegurarnos que si el arreglo libro no este vacio, porque si lo esta significaria que no encontro nada. Por otro lado si encontro almenos uno, usaremos la funcion indexOf para obtener la posicion del primer elemento filtrado es decir libro[0], dentro del arreglo original libros. 
 
-3. Interacción con el usuario: ¿Cómo mostrar la lista de libros disponibles y los libros prestados usando manipulación del DOM (getElementById, querySelectorAll)? 
+*3. Interacción con el usuario: ¿Cómo mostrar la lista de libros disponibles y los libros prestados usando manipulación del DOM (getElementById, querySelectorAll)?*
+
+Utilizamos innerHTML='' para borrar cualquier contenido existente en el HTML antes de agregar nuevos datos asegurando que las listas no se dupliquen al actualizar nueva informacion.
+Recorremos cada libro en las listas de libros disponibles y prestado con un bucle, la cual nos permita acceder a los titulos de los libros uno por uno.
+
+                                                    function mostar_libros_disponibles(){
+                                                        const doc_libros_disponibles = document.getElementById('libros_disponibles');
+                                                        libros_disponibles.innerHTML = '';
+                                                        for (const libro of libros_disponibles) {
+                                                            doc_libros_disponibles.innerHTML += `<li>${libro.titulo}</li>`;
+                                                        }
+                                                    }
+
+                                                    function mostrar_libros_prestados(){
+                                                        const doc_libros_prestados = document.getElementById('libros_prestados');
+                                                        libros_prestados.innerHTML = '';
+                                                        for (const libro of libros_prestados) {
+                                                            doc_libros_prestados.innerHTML += `<li>${libro.titulo}</li>`;
+                                                        }
+                                                    }
+
+En la actualizacion dinamica del DOM, en cada iteracion del bucle el titulo del libro se agregara al elemento del HTML utilizado, permitiendo la actualizacion de la lista de los libros al usuario.
+
 
 4. Alertas y recordatorios: ¿Cómo enviar recordatorios automáticos de devolución usando setTimeout o setInterval? 
 
